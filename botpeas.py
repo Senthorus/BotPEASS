@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Any
 
+import time
 import requests
 import datetime
 import pathlib
@@ -119,7 +120,6 @@ def get_modified_cves() -> list:
     global LAST_MODIFIED_CVE
 
     cves = get_cves(Time_Type.LAST_MODIFIED)
-    print(cves)
     filtered_cves, new_last_time = filter_cves(
         cves["results"],
         LAST_MODIFIED_CVE,
@@ -138,7 +138,7 @@ def filter_cves(cves: list, last_time: datetime.datetime, tt_filter: Time_Type) 
 
     for cve in cves:
         cve_time = datetime.datetime.strptime(cve[tt_filter.value], TIME_FORMAT)
-        if cve_time < last_time: #cves TODO change condition
+        if cve_time > last_time:
             if ALL_VALID or is_summ_keyword_present(cve["summary"]) or \
                     is_prod_keyword_present(str(cve["vulnerable_configuration"])):
                 filtered_cves.append(cve)
@@ -228,11 +228,17 @@ def generate_public_expls_message(public_expls: list) -> str:
 def send_teams_mesage(cve_data: dict):
     """ Send a message to the teams channel """
 
-    teams_url = "https://senthorussa.webhook.office.com/webhookb2/b33deea3-b61b-4a12-8d59-1fcee59e1b50@24673957-1a8b-41a5-be4c-dd7214932784/IncomingWebhook/7db687461d6c4aa3a4dab3d5d3cc790f/4519b03f-1baf-446d-94fc-587e8d095985"  # os.getenv('TEAMS_WEBHOOK')
+    teams_url = os.getenv('TEAMS_WEBHOOK')
 
     if not teams_url:
-        print("SLACK_WEBHOOK wasn't configured in the secrets!")
+        print("TEAMS_WEBHOOK wasn't configured in the secrets!")
         return
+
+    references = ""
+    for link in cve_data['references']:
+        if references != "":
+            references += "\r"
+        references += " - [" + link + "](" + link + ")"
 
     json_params = {
         "@type": "MessageCard",
@@ -241,19 +247,13 @@ def send_teams_mesage(cve_data: dict):
             "activityTitle": "CVEs report from BotPEASS",
             "facts": [{
                 "name": "Modified",
-                "value": cve_data['last-modified'].split('T')[0]
+                "value": str(cve_data['Modified'])
             }, {
                 "name": "Published",
-                "value": cve_data['Published'].split('T')[0]
-            }, {
-                "name": "access",
-                "value": " "
-            }, {
-                "name": "assigner",
-                "value": ""
+                "value": str(cve_data['Published'])
             }, {
                 "name": "cvss",
-                "value": cve_data["cvss"]
+                "value": str(cve_data["cvss"])
             }, {
                 "name": "cwe",
                 "value": cve_data["cwe"]
@@ -261,17 +261,14 @@ def send_teams_mesage(cve_data: dict):
                 "name": "id",
                 "value": cve_data["id"]
             }, {
-                "name": "impact",
-                "value": ""
-            }, {
                 "name": "last-modified",
-                "value": ""
+                "value": cve_data['last-modified']
             }, {
                 "name": "references",
-                "value": ""
+                "value": references
             }, {
                 "name": "summary",
-                "value": ""
+                "value": cve_data['summary']
             }
 
             ],
@@ -279,8 +276,9 @@ def send_teams_mesage(cve_data: dict):
         }]
     }
 
-    requests.post(teams_url, json=json_params)
-
+    response = requests.post(teams_url, json=json_params)
+    if response.status_code != 200:
+        print("ERROR: message for CVE ", cve_data['id'], " was not sent" )
 
 
 #################### MAIN #########################
@@ -300,12 +298,12 @@ def main():
 
     for new_cve in new_cves:
         send_teams_mesage(new_cve)
-        #public_exploits = search_exploits(new_cve['id'])
-        cve_message = generate_new_cve_message(new_cve)
-        #public_expls_msg = generate_public_expls_message(public_exploits)
-        break
+        time.sleep(0.2)
+        # public_exploits = search_exploits(new_cve['id'])
+        #cve_message = generate_new_cve_message(new_cve)
+        # public_expls_msg = generate_public_expls_message(public_exploits)
 
-
+    return
     # Find and publish modified CVEs
     modified_cves = get_modified_cves()
 
@@ -314,9 +312,9 @@ def main():
     print(f"Modified CVEs discovered: {modified_cves_ids}")
 
     for modified_cve in modified_cves:
-        #public_exploits = search_exploits(modified_cve['id'])
+        # public_exploits = search_exploits(modified_cve['id'])
         cve_message = generate_modified_cve_message(modified_cve)
-        #public_expls_msg = generate_public_expls_message(public_exploits)
+        # public_expls_msg = generate_public_expls_message(public_exploits)
 
     update_lasttimes()
 
