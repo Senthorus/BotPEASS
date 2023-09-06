@@ -13,7 +13,9 @@ DESCRIPTION_KEYWORDS_I:
   - "wazuh"
   - "thehive"
   - "splunk"
-  -
+  - "microsoft"
+  - "phishing"
+  - "okta"
 DESCRIPTION_KEYWORDS:
 
 PRODUCT_KEYWORDS_I:
