@@ -163,72 +163,12 @@ def is_prod_keyword_present(products: str):
         any(w.lower() in products.lower() for w in PRODUCT_KEYWORDS_I)
 
 
-def search_exploits(cve: str) -> list:
-    ''' Given a CVE it will search for public exploits to abuse it '''
-
-    return []
-    # TODO: Find a better way to discover exploits
-
-    vulners_api_key = os.getenv('VULNERS_API_KEY')
-
-    if vulners_api_key:
-        vulners_api = vulners.Vulners(api_key=vulners_api_key)
-        cve_data = vulners_api.searchExploit(cve)
-        return [v['vhref'] for v in cve_data]
-
-    else:
-        print("VULNERS_API_KEY wasn't configured in the secrets!")
-
-    return []
-
-
-#################### GENERATE MESSAGES #########################
-
-def generate_new_cve_message(cve_data: dict) -> str:
-    ''' Generate new CVE message for sending to slack '''
-
-    message = f"🚨  *{cve_data['id']}*  🚨\n"
-    message += f"🔮  *CVSS*: {cve_data['cvss']}\n"
-    message += f"📅  *Published*: {cve_data['Published']}\n"
-    message += "📓  *Summary*: "
-    message += cve_data["summary"] if len(cve_data["summary"]) < 500 else cve_data["summary"][:500] + "..."
-
-    if cve_data["vulnerable_configuration"]:
-        message += f"\n🔓  *Vulnerable* (_limit to 10_): " + ", ".join(cve_data["vulnerable_configuration"][:10])
-
-    message += "\n\n🟢 ℹ️  *More information* (_limit to 5_)\n" + "\n".join(cve_data["references"][:5])
-
-    message += "\n"
-
-    # message += "\n\n(Check the bots description for more information about the bot)\n"
-
-    return message
-
-
-def generate_modified_cve_message(cve_data: dict) -> str:
-    ''' Generate modified CVE message for sending to slack '''
-
-    message = f"📣 *{cve_data['id']}*(_{cve_data['cvss']}_) was modified the {cve_data['last-modified'].split('T')[0]} (_originally published the {cve_data['Published'].split('T')[0]}_)\n"
-    return message
-
-
-def generate_public_expls_message(public_expls: list) -> str:
-    ''' Given the list of public exploits, generate the message '''
-
-    message = ""
-
-    if public_expls:
-        message = "😈  *Public Exploits* (_limit 20_)  😈\n" + "\n".join(public_expls[:20])
-
-    return message
-
-
 #################### SEND MESSAGES #########################
 
 def send_teams_mesage(cve_data: dict):
     """ Send a message to the teams channel """
 
-    teams_url = os.getenv('TEAMS_WEBHOOK')
+    teams_url = os.getenv('TEAMS_WEBHOOK_DEV')
 
     if not teams_url:
         print("TEAMS_WEBHOOK wasn't configured in the secrets!")
@@ -299,22 +239,13 @@ def main():
     for new_cve in new_cves:
         send_teams_mesage(new_cve)
         time.sleep(0.2)
-        # public_exploits = search_exploits(new_cve['id'])
-        #cve_message = generate_new_cve_message(new_cve)
-        # public_expls_msg = generate_public_expls_message(public_exploits)
 
-    return
     # Find and publish modified CVEs
     modified_cves = get_modified_cves()
 
     modified_cves = [mcve for mcve in modified_cves if not mcve['id'] in new_cves_ids]
     modified_cves_ids = [mcve['id'] for mcve in modified_cves]
     print(f"Modified CVEs discovered: {modified_cves_ids}")
-
-    for modified_cve in modified_cves:
-        # public_exploits = search_exploits(modified_cve['id'])
-        cve_message = generate_modified_cve_message(modified_cve)
-        # public_expls_msg = generate_public_expls_message(public_exploits)
 
     update_lasttimes()
 

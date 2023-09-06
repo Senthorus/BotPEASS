@@ -1,14 +1,9 @@
 ALL_VALID: yes
 
 DESCRIPTION_KEYWORDS_I:
-- pf4j
-
+  - "graylog"
 DESCRIPTION_KEYWORDS:
-- pf4j
 
 PRODUCT_KEYWORDS_I:
-- pf4j
 
 PRODUCT_KEYWORDS:
-- pf4j
-
