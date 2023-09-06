@@ -210,7 +210,6 @@ def send_teams_mesage(cve_data: dict):
                 "name": "summary",
                 "value": cve_data['summary']
             }
-
             ],
             "markdown": True
         }]

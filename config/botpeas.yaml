@@ -1,7 +1,19 @@
 ALL_VALID: yes
 
 DESCRIPTION_KEYWORDS_I:
-  - "graylog"
+  - "windows"
+  - "nessus"
+  - "azure "
+  - "entraid"
+  - "aws"
+  - "adobe"
+  - "servicenow"
+  - "mac"
+  - "keeper"
+  - "wazuh"
+  - "thehive"
+  - "splunk"
+  -
 DESCRIPTION_KEYWORDS:
 
 PRODUCT_KEYWORDS_I:
