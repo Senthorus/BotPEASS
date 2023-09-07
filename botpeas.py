@@ -251,7 +251,7 @@ def send_teams_mesage_empty():
 
     response = requests.post(teams_url, json=json_params)
     if response.status_code != 200:
-        print("ERROR: message for CVE ", cve_data['id'], " was not sent" )
+        print("ERROR: message for CVE ")
 
 #################### MAIN #########################
 
