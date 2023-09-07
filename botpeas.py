@@ -220,19 +220,20 @@ def send_teams_mesage(cve_data: dict):
 
 
 def send_teams_mesage_empty():
-    """ Send a message to the teams channel """
+    """ Send a message to the teams
+    channel """
 
     teams_url = os.getenv('TEAMS_WEBHOOK_DEV')
 
     if not teams_url:
-        print("TEAMS_WEBHOOK wasn't configured in the secrets!")
+        print("TEAMS_WEBHOOK_DEV wasn't configured in the secrets!")
         return
 
     keywords = ""
     for key in DESCRIPTION_KEYWORDS_I:
         if keywords != "":
             keywords += "\r"
-        keywords += " - [" + key
+        keywords += " - " + key
 
     json_params = {
         "@type": "MessageCard",
