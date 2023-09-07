@@ -170,7 +170,7 @@ def is_prod_keyword_present(products: str):
 def send_teams_mesage(cve_data: dict):
     """ Send a message to the teams channel """
 
-    teams_url = os.getenv('TEAMS_WEBHOOK_DEV')
+    teams_url = os.getenv('TEAMS_WEBHOOK')
 
     if not teams_url:
         print("TEAMS_WEBHOOK wasn't configured in the secrets!")
