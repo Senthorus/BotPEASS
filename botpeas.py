@@ -168,7 +168,6 @@ def send_teams_mesage(cve_data: dict):
     """ Send a message to the teams channel """
 
     teams_url = os.getenv('TEAMS_WEBHOOK_DEV')
-    print(os.environ)
     if not teams_url:
         print("TEAMS_WEBHOOK wasn't configured in the secrets!")
         return
@@ -224,7 +223,7 @@ def send_teams_mesage_empty():
     channel """
 
     teams_url = os.getenv('TEAMS_WEBHOOK_DEV')
-
+    print(os.environ)
     if not teams_url:
         print("TEAMS_WEBHOOK_DEV wasn't configured in the secrets!")
         return
