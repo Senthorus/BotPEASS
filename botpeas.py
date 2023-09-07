@@ -222,41 +222,6 @@ def send_teams_mesage(cve_data: dict):
         print("ERROR: message for CVE ", cve_data['id'], " was not sent")
 
 
-def send_teams_mesage_empty():
-    """ Send a message to the teams
-    channel """
-
-    teams_url = os.getenv('TEAMS_WEBHOOK_DEV')
-
-    if not teams_url:
-        print("TEAMS_WEBHOOK_DEV wasn't configured in the secrets!")
-        return
-
-    keywords = ""
-    for key in DESCRIPTION_KEYWORDS_I:
-        if keywords != "":
-            keywords += "\r"
-        keywords += " - " + key
-
-    json_params = {
-        "@type": "MessageCard",
-        "summary": "CVEs report from BotPEASS",
-        "sections": [{
-            "activityTitle": "CVEs report was empty",
-            "facts": [{
-                "name": "Keywords list",
-                "value": keywords
-            }
-            ],
-            "markdown": True
-        }]
-    }
-
-    response = requests.post(teams_url, json=json_params)
-    if response.status_code != 200:
-        print("ERROR: message for CVE not send")
-
-
 #################### MAIN #########################
 
 def main():
@@ -271,8 +236,7 @@ def main():
 
     new_cves_ids = [ncve['id'] for ncve in new_cves]
     print(f"New CVEs discovered: {new_cves_ids}")
-    if new_cves == []:
-        send_teams_mesage_empty()
+
     for new_cve in new_cves:
         send_teams_mesage(new_cve)
         time.sleep(0.2)
