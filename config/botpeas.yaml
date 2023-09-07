@@ -1,24 +1,22 @@
-ALL_VALID: yes
+ALL_VALID: no
 
 DESCRIPTION_KEYWORDS_I:
   - "windows"
   - "nessus"
-  - "azure "
+  - "azure"
   - "entraid"
-  - "aws"
-  - "adobe"
+  - "aws "
   - "servicenow"
-  - "mac"
+  - "macos"
   - "keeper"
   - "wazuh"
-  - "thehive"
-  - "splunk"
-  - "microsoft"
-  - "phishing"
-  - "okta"
-  - "Palo Alto"
+  - "thehive "
+  - "splunk "
+  - "microsoft "
+  - "phishing "
+  - "okta "
+  - "Palo Alto "
+
 DESCRIPTION_KEYWORDS:
-
 PRODUCT_KEYWORDS_I:
-
 PRODUCT_KEYWORDS:

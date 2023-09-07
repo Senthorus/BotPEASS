@@ -8,7 +8,6 @@ import pathlib
 import json
 import os
 import yaml
-import vulners
 
 from os.path import join
 from enum import Enum
@@ -45,10 +44,10 @@ def load_keywords():
         keywords_config = yaml.safe_load(yaml_file)
         print(f"Loaded keywords: {keywords_config}")
         ALL_VALID = keywords_config["ALL_VALID"]
-        DESCRIPTION_KEYWORDS_I = keywords_config["DESCRIPTION_KEYWORDS_I"]
-        DESCRIPTION_KEYWORDS = keywords_config["DESCRIPTION_KEYWORDS"]
-        PRODUCT_KEYWORDS_I = keywords_config["PRODUCT_KEYWORDS_I"]
-        PRODUCT_KEYWORDS = keywords_config["PRODUCT_KEYWORDS"]
+        DESCRIPTION_KEYWORDS_I = [] if keywords_config["DESCRIPTION_KEYWORDS_I"] is None else keywords_config["DESCRIPTION_KEYWORDS_I"]
+        DESCRIPTION_KEYWORDS = [] if keywords_config["DESCRIPTION_KEYWORDS"] is None else keywords_config["DESCRIPTION_KEYWORDS"]
+        PRODUCT_KEYWORDS_I = [] if keywords_config["PRODUCT_KEYWORDS_I"] is None else keywords_config["PRODUCT_KEYWORDS_I"]
+        PRODUCT_KEYWORDS = [] if keywords_config["PRODUCT_KEYWORDS"] is None else keywords_config["PRODUCT_KEYWORDS"]
 
 
 def load_lasttimes():
