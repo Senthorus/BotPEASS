@@ -44,9 +44,12 @@ def load_keywords():
         keywords_config = yaml.safe_load(yaml_file)
         print(f"Loaded keywords: {keywords_config}")
         ALL_VALID = keywords_config["ALL_VALID"]
-        DESCRIPTION_KEYWORDS_I = [] if keywords_config["DESCRIPTION_KEYWORDS_I"] is None else keywords_config["DESCRIPTION_KEYWORDS_I"]
-        DESCRIPTION_KEYWORDS = [] if keywords_config["DESCRIPTION_KEYWORDS"] is None else keywords_config["DESCRIPTION_KEYWORDS"]
-        PRODUCT_KEYWORDS_I = [] if keywords_config["PRODUCT_KEYWORDS_I"] is None else keywords_config["PRODUCT_KEYWORDS_I"]
+        DESCRIPTION_KEYWORDS_I = [] if keywords_config["DESCRIPTION_KEYWORDS_I"] is None else keywords_config[
+            "DESCRIPTION_KEYWORDS_I"]
+        DESCRIPTION_KEYWORDS = [] if keywords_config["DESCRIPTION_KEYWORDS"] is None else keywords_config[
+            "DESCRIPTION_KEYWORDS"]
+        PRODUCT_KEYWORDS_I = [] if keywords_config["PRODUCT_KEYWORDS_I"] is None else keywords_config[
+            "PRODUCT_KEYWORDS_I"]
         PRODUCT_KEYWORDS = [] if keywords_config["PRODUCT_KEYWORDS"] is None else keywords_config["PRODUCT_KEYWORDS"]
 
 
@@ -168,6 +171,7 @@ def send_teams_mesage(cve_data: dict):
     """ Send a message to the teams channel """
 
     teams_url = os.getenv('TEAMS_WEBHOOK_DEV')
+
     if not teams_url:
         print("TEAMS_WEBHOOK wasn't configured in the secrets!")
         return
@@ -215,7 +219,7 @@ def send_teams_mesage(cve_data: dict):
 
     response = requests.post(teams_url, json=json_params)
     if response.status_code != 200:
-        print("ERROR: message for CVE ", cve_data['id'], " was not sent" )
+        print("ERROR: message for CVE ", cve_data['id'], " was not sent")
 
 
 def send_teams_mesage_empty():
@@ -223,7 +227,7 @@ def send_teams_mesage_empty():
     channel """
 
     teams_url = os.getenv('TEAMS_WEBHOOK_DEV')
-    print(os.environ)
+
     if not teams_url:
         print("TEAMS_WEBHOOK_DEV wasn't configured in the secrets!")
         return
@@ -250,7 +254,8 @@ def send_teams_mesage_empty():
 
     response = requests.post(teams_url, json=json_params)
     if response.status_code != 200:
-        print("ERROR: message for CVE ")
+        print("ERROR: message for CVE not send")
+
 
 #################### MAIN #########################
 
