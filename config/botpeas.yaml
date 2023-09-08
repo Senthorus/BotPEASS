@@ -1,13 +1,11 @@
 ALL_VALID: no
 
 DESCRIPTION_KEYWORDS_I:
-  - "windows"
   - "nessus"
   - "azure"
   - "entraid"
   - "aws "
   - "servicenow"
-  - "macos"
   - "keeper"
   - "wazuh"
   - "thehive "
