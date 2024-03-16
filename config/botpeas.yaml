@@ -5,7 +5,6 @@ DESCRIPTION_KEYWORDS_I:
   - "azure"
   - "entraid"
   - "aws "
-  - "servicenow"
   - "keeper"
   - "wazuh"
   - "thehive "
@@ -13,7 +12,6 @@ DESCRIPTION_KEYWORDS_I:
   - "microsoft "
   - "okta "
   - "Palo Alto "
-  - "haproxy"
 
 DESCRIPTION_KEYWORDS:
 PRODUCT_KEYWORDS_I:
